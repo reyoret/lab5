@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музична школа "Гармонія" - Лабораторна 5</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Vue 3 через CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Компонент і головний скрипт -->
+    <script src="components/CourseCard.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div id="app" class="page-layout">
+        <header class="site-header">
+            <h1>Музична школа "Гармонія"</h1>
+            <p class="subtitle">Лабораторна робота №5</p>
+        </header>
+
+        <nav class="site-nav" aria-label="Головна навігація">
+            <ul>
+                <li><a href="#about">Про школу</a></li>
+                <li><a href="#courses">Курси</a></li>
+                <li><a href="#timer">Таймер</a></li>
+                <li><a href="#contacts">Контакти</a></li>
+            </ul>
+        </nav>
+
+        <main class="site-main">
+            <article class="content">
+                <section id="about" class="card-section">
+                    <h2>Про школу</h2>
+                    <p><strong>Музична школа "Гармонія"</strong> пропонує навчання для дітей і дорослих за сучасними методиками. Учні розвивають музичний слух, ритм, техніку гри та сценічну впевненість.</p>
+                    <p>У школі діють індивідуальні та групові заняття, підготовка до концертів і конкурсів, а також репетиційні заняття з викладачами різних музичних напрямів.</p>
+                </section>
+
+                <section id="courses" class="card-section">
+                    <h2>Наші курси</h2>
+
+                    <div class="course-grid">
+                        <course-card
+                            v-for="course in courses"
+                            :key="course.id"
+                            :course="course"
+                            @select-course="selectCourse"
+                        ></course-card>
+                    </div>
+
+                    <div class="selected-course" v-if="selectedCourse">
+                        <h3>Обраний курс</h3>
+                        <p><strong>Назва:</strong> {{ selectedCourse.name }}</p>
+                        <p><strong>Викладач:</strong> {{ selectedCourse.teacher }}</p>
+                        <p><strong>Тривалість:</strong> {{ selectedCourse.duration }} хв</p>
+                        <p><strong>Рівень:</strong> {{ selectedCourse.level }}</p>
+                    </div>
+                </section>
+
+                <section id="timer" class="card-section timer-section">
+                    <h2>Таймер репетиції</h2>
+
+                    <div class="timer-panel" :class="{ activeTimer: isRunning }">
+                        <label for="minutes">Тривалість репетиції (хв):</label>
+                        <input
+                            id="minutes"
+                            type="number"
+                            min="1"
+                            max="180"
+                            v-model.number="minutes"
+                            :disabled="isRunning"
+                        >
+
+                        <p class="error-message" v-if="showError">
+                            Введіть коректне значення від 1 до 180 хвилин.
+                        </p>
+
+                        <p class="timer-display">{{ formattedTime }}</p>
+
+                        <div class="button-group">
+                            <button @click="startTimer" :disabled="isRunning" class="action-button">
+                                Старт
+                            </button>
+                            <button @click="stopTimer" :disabled="!isRunning" class="action-button secondary-button">
+                                Стоп
+                            </button>
+                            <button @click="resetTimer" class="action-button reset-button">
+                                Скинути
+                            </button>
+                        </div>
+
+                        <p class="status-text" v-if="isRunning">Таймер запущено</p>
+                        <p class="status-text" v-else>Таймер зупинено</p>
+                    </div>
+                </section>
+            </article>
+
+            <aside class="sidebar" id="contacts">
+                <section class="aside-block">
+                    <h3>Переваги навчання</h3>
+                    <ul>
+                        <li>Індивідуальний підхід</li>
+                        <li>Сучасні методики</li>
+                        <li>Підготовка до виступів</li>
+                        <li>Досвідчені викладачі</li>
+                    </ul>
+                </section>
+
+                <section class="aside-block">
+                    <h3>Контакти</h3>
+                    <p>м. Київ, вул. Музична, 13</p>
+                    <p>Телефон: +380 99 123 45 67</p>
+                    <p>Email: info@harmonia-school.ua</p>
+                </section>
+            </aside>
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2026 Музична школа "Гармонія". Всі права захищені.</p>
+        </footer>
+    </div>
+</body>
+</html>
